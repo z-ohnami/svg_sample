@@ -2,15 +2,85 @@
 <html>
 <head>
   <title></title>
+  <style type="text/css">
+    body {
+      margin: 0;
+      padding: 0;
+    }
+  </style>
 </head>
 <body>
   <div id="drawing"></div>
 
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/svg.js/2.6.3/svg.min.js"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vivus@0.4.3/dist/vivus.min.js"></script>
   <script type="text/javascript">
     if (SVG.supported) {
-      var draw = SVG('drawing').size(300, 300);
-      var rect = draw.rect(100, 100).attr({ fill: '#f06' })
+      var draw = SVG('drawing').size(screen.width, screen.height);
+      var centerX = screen.width / 2;
+      var centerY = screen.height / 2;
+      var rect = draw.rect(screen.width, screen.height).attr({ fill: '#191970' });
+      var yukiGroup = draw.group().attr('id', 'yuki-group').x(0).y(0)
+      // yukiGroup.on('start', function() {
+      //   var yuki = this.draw.circle(100).fill('#fff').center(200, 200)
+      // })
+      // var house = draw.rect(100, 100).radius(10).fill('#fff').center(centerX, centerY)
+
+      // var polyline = draw.polyline('50,0 60,40 100,50 60,60 50,100 40,60 0,50 40,40')
+      // var polyline = draw.polyline('0,0 100,0 100,100 0,100 0,0')
+      // polyline.fill('none')
+      // polyline.stroke({ color: '#fff', width: 6, linecap: 'round', linejoin: 'round' })
+
+      // var yane = draw.polyline('0,0 50,100 100,0 0,0').fill('none').stroke({ color: '#fff', width: 6, linecap: 'round', linejoin: 'round' })
+      // yane.y(-100)
+
+      var animateAfter = function() {
+        var rect = SVG.get('house-block')
+        rect.animate(200, '>').fill("#ff8c00")
+
+        var yukiGroup = SVG.get('yuki-group')
+        yukiGroup.doc().rect(10, 10).radius(10).fill('#fff').center(100, 0).animate(1000).y(screen.height+10)
+      }
+
+      var drawScene = function() {
+        this.button.animate(400, '>').fill('#191970')
+        var text = this.draw.text('Merry Christmas').font({size: 60}).fill('#191970').animate(2000, '>', 1000).fill('#fff').x(20).y(20);
+
+        var rect = this.draw.rect(100, 100)
+        rect.attr('id', 'house-block')
+        var yane = this.draw.polygon('0,0 50,-50 100,0')
+        var group = this.draw.group()
+
+        group.attr('id', 'group1')
+        group.add(rect)
+        group.add(yane)
+        group.center(centerX, centerY).fill('none').stroke({ color: '#fff', width: 6, linecap: 'round', linejoin: 'round' })
+
+        new Vivus(group.attr('id'), {duration: 200}, animateAfter);
+      }
+
+      var button = draw.circle(100)
+      button.on('click', drawScene, this).center(centerX, centerY).fill('#fff')
+
+      // var rect = draw.rect(100, 100)
+      // var yane = draw.polygon('0,0 50,-50 100,0')
+      // var group = draw.group()
+      // group.add(rect)
+      // group.add(yane)
+      // group.center(centerX, centerY).fill('none').stroke({ color: '#fff', width: 6, linecap: 'round', linejoin: 'round' })
+
+      // var set = draw.set()
+      // set.add(polyline).add(yane).x(centerX).y(centerY)
+
+      // var text = draw.text(function(add) {
+      //   add.tspan('Lorem ipsum dolor sit amet ').newLine()
+      //   add.tspan('consectetur').fill('#f06')
+      //   add.tspan('.')
+      //   add.tspan('Cras sodales imperdiet auctor.').newLine().dx(20)
+      //   add.tspan('Nunc ultrices lectus at erat').newLine()
+      //   add.tspan('dictum pharetra elementum ante').newLine()
+      // })
+      // new Vivus(draw.attr('id'), {duration: 200});
     } else {
       alert('SVG not supported');
     }
