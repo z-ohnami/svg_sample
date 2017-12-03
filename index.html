@@ -1,6 +1,9 @@
 <!DOCTYPE html>
-<html>
+<html lang="ja">
 <head>
+  <meta charset="utf-8">
+  <meta content="ie=edge" http-equiv="x-ua-compatible">
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1" name="viewport">
   <title></title>
   <style type="text/css">
     body {
@@ -16,71 +19,88 @@
   <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vivus@0.4.3/dist/vivus.min.js"></script>
   <script type="text/javascript">
     if (SVG.supported) {
-      var draw = SVG('drawing').size(screen.width, screen.height);
-      var centerX = screen.width / 2;
-      var centerY = screen.height / 2;
-      var rect = draw.rect(screen.width, screen.height).attr({ fill: '#191970' });
-      var yukiGroup = draw.group().attr('id', 'yuki-group').x(0).y(0)
-      // yukiGroup.on('start', function() {
-      //   var yuki = this.draw.circle(100).fill('#fff').center(200, 200)
-      // })
-      // var house = draw.rect(100, 100).radius(10).fill('#fff').center(centerX, centerY)
-
-      // var polyline = draw.polyline('50,0 60,40 100,50 60,60 50,100 40,60 0,50 40,40')
-      // var polyline = draw.polyline('0,0 100,0 100,100 0,100 0,0')
-      // polyline.fill('none')
-      // polyline.stroke({ color: '#fff', width: 6, linecap: 'round', linejoin: 'round' })
-
-      // var yane = draw.polyline('0,0 50,100 100,0 0,0').fill('none').stroke({ color: '#fff', width: 6, linecap: 'round', linejoin: 'round' })
-      // yane.y(-100)
+      var draw = SVG('drawing').size(window.innerWidth, window.innerHeight);
+      var centerX = window.innerWidth / 2;
+      var centerY = window.innerHeight / 2;
+      var rect = draw.rect(window.innerWidth, window.innerHeight).attr({ fill: '#191970' });
+      rect.attr('id', 'background')
 
       var animateAfter = function() {
-        var rect = SVG.get('house-block')
-        rect.animate(200, '>').fill("#ff8c00")
+        var background = SVG.get('background')
 
-        var yukiGroup = SVG.get('yuki-group')
-        yukiGroup.doc().rect(10, 10).radius(10).fill('#fff').center(100, 0).animate(1000).y(screen.height+10)
+        var block = SVG.get('house-block')
+        block.fill("#191970")
+
+        var yane = SVG.get('house-yane')
+        yane.fill("#191970")
+
+        var entotsu = SVG.get('house-entotsu')
+        entotsu.fill("#191970")
+
+        var mado = SVG.get('house-mado')
+        mado.fill("#191970").animate(200, '>', 1500).fill("#ff8c00")
+
+        var hoshiRandomDelays = [0, 100, 300, 600, 900, 1200]
+        for (var i = 0; i <= 200; i++) {
+          var hoshiX = Math.floor( Math.random() * window.innerWidth);
+          var hoshiY = Math.floor( Math.random() * (window.innerHeight));
+          var hoshi = draw.polygon('6 2 2 12 12 6 0 6 10 12').fill('#191970').x(hoshiX).y(hoshiY)
+          background.after(hoshi)
+          var duration = Math.floor( Math.random() * window.innerWidth);
+          hoshi.animate(400, '-', hoshiRandomDelays[Math.floor( Math.random() * hoshiRandomDelays.length )]).fill('#f0e68c')
+        }
+
+        var text = draw.text('Merry\nChristmas').font({size: 60, weight: 'bold'}).fill('#191970').animate(1500, '>', 500).fill('#fff').x(window.innerWidth / 2 - window.innerWidth * 0.4).y(30);
       }
 
       var drawScene = function() {
-        this.button.animate(400, '>').fill('#191970')
-        var text = this.draw.text('Merry Christmas').font({size: 60}).fill('#191970').animate(2000, '>', 1000).fill('#fff').x(20).y(20);
+        this.button.hide()
 
-        var rect = this.draw.rect(100, 100)
-        rect.attr('id', 'house-block')
-        var yane = this.draw.polygon('0,0 50,-50 100,0')
+        var jimen = this.draw.rect(window.innerWidth, window.innerHeight * 0.1).fill('#fff').x(0).y(window.innerHeight - window.innerHeight * 0.1)
+
+        var kabe = this.draw.rect(180, 180).x(10)
+        kabe.attr('id', 'house-block')
+
+        var mado1 = this.draw.rect(50, 50).x(50).y(30)
+        mado1.attr('id', 'house-mado1')
+        var mado2 = this.draw.rect(50, 50).x(100).y(30)
+        mado2.attr('id', 'house-mado2')
+        var mado3 = this.draw.rect(50, 50).x(50).y(80)
+        mado3.attr('id', 'house-mado3')
+        var mado4 = this.draw.rect(50, 50).x(100).y(80)
+        mado4.attr('id', 'house-mado4')
+        var mado = this.draw.group()
+        mado.attr('id', 'house-mado')
+        mado.add(mado1)
+        mado.add(mado2)
+        mado.add(mado3)
+        mado.add(mado4)
+
+        var yane = this.draw.polygon('0,0 100,-100 200,0')
+        yane.attr('id', 'house-yane')
+        var entotsu = this.draw.rect(50, 80).x(120).y(-100)
+        entotsu.attr('id', 'house-entotsu')
         var group = this.draw.group()
 
         group.attr('id', 'group1')
-        group.add(rect)
+        group.add(kabe)
+        group.add(mado)
         group.add(yane)
-        group.center(centerX, centerY).fill('none').stroke({ color: '#fff', width: 6, linecap: 'round', linejoin: 'round' })
+        group.add(entotsu)
+        group.center((window.innerWidth / 2) + 80, window.innerHeight - jimen.height()).fill('none')
+          .stroke({ color: '#fff', width: 6, linecap: 'round', linejoin: 'round' })
 
         new Vivus(group.attr('id'), {duration: 200}, animateAfter);
       }
 
-      var button = draw.circle(100)
+      var hoshi = draw.polygon('48 16 16 96 96 48 0 48 80 96')
+      var hoshiText = draw.text('touch!').font({size: 20}).x(20).y(96)
+
+      var button = draw.group()
+      button.add(hoshi)
+      button.add(hoshiText)
       button.on('click', drawScene, this).center(centerX, centerY).fill('#fff')
-
-      // var rect = draw.rect(100, 100)
-      // var yane = draw.polygon('0,0 50,-50 100,0')
-      // var group = draw.group()
-      // group.add(rect)
-      // group.add(yane)
-      // group.center(centerX, centerY).fill('none').stroke({ color: '#fff', width: 6, linecap: 'round', linejoin: 'round' })
-
-      // var set = draw.set()
-      // set.add(polyline).add(yane).x(centerX).y(centerY)
-
-      // var text = draw.text(function(add) {
-      //   add.tspan('Lorem ipsum dolor sit amet ').newLine()
-      //   add.tspan('consectetur').fill('#f06')
-      //   add.tspan('.')
-      //   add.tspan('Cras sodales imperdiet auctor.').newLine().dx(20)
-      //   add.tspan('Nunc ultrices lectus at erat').newLine()
-      //   add.tspan('dictum pharetra elementum ante').newLine()
-      // })
-      // new Vivus(draw.attr('id'), {duration: 200});
+      button.animate(2000, '>').fill('#191970').reverse(true).loop()
     } else {
       alert('SVG not supported');
     }
