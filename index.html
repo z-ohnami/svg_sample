@@ -19,68 +19,66 @@
   <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vivus@0.4.3/dist/vivus.min.js"></script>
   <script type="text/javascript">
     if (SVG.supported) {
-      var draw = SVG('drawing').size(window.innerWidth, window.innerHeight);
-      var centerX = window.innerWidth / 2;
-      var centerY = window.innerHeight / 2;
-      var rect = draw.rect(window.innerWidth, window.innerHeight).attr({ fill: '#191970' });
+      const draw = SVG('drawing').size(window.innerWidth, window.innerHeight)
+      const rect = draw.rect(window.innerWidth, window.innerHeight).fill('#191970')
       rect.attr('id', 'background')
 
-      var animateAfter = function() {
-        var background = SVG.get('background')
+      const animateAfter = () => {
+        const background = SVG.get('background')
 
-        var block = SVG.get('house-block')
+        const block = SVG.get('house-block')
         block.fill("#191970")
 
-        var yane = SVG.get('house-yane')
+        const yane = SVG.get('house-yane')
         yane.fill("#191970")
 
-        var entotsu = SVG.get('house-entotsu')
+        const entotsu = SVG.get('house-entotsu')
         entotsu.fill("#191970")
 
-        var mado = SVG.get('house-mado')
+        const mado = SVG.get('house-mado')
         mado.fill("#191970").animate(200, '>', 1500).fill("#ff8c00")
 
-        var hoshiRandomDelays = [0, 100, 300, 600, 900, 1200]
-        for (var i = 0; i <= 200; i++) {
-          var hoshiX = Math.floor( Math.random() * window.innerWidth);
-          var hoshiY = Math.floor( Math.random() * (window.innerHeight));
-          var hoshi = draw.polygon('6 2 2 12 12 6 0 6 10 12').fill('#191970').x(hoshiX).y(hoshiY)
+        const hoshiRandomDelays = [0, 100, 300, 600, 900, 1200]
+        for (let i = 0; i <= 200; i++) {
+          const hoshiX = Math.floor( Math.random() * window.innerWidth);
+          const hoshiY = Math.floor( Math.random() * (window.innerHeight));
+          const hoshi = draw.polygon('6 2 2 12 12 6 0 6 10 12').fill('#191970').x(hoshiX).y(hoshiY)
           background.after(hoshi)
-          var duration = Math.floor( Math.random() * window.innerWidth);
+          const duration = Math.floor( Math.random() * window.innerWidth);
           hoshi.animate(400, '-', hoshiRandomDelays[Math.floor( Math.random() * hoshiRandomDelays.length )]).fill('#f0e68c')
         }
 
-        var text = draw.text('Merry\nChristmas').font({size: 60, weight: 'bold'}).fill('#191970').animate(1500, '>', 500).fill('#fff').x(window.innerWidth / 2 - window.innerWidth * 0.4).y(30);
+        const text = draw.text('Merry\nChristmas').font({size: 60, weight: 'bold'}).fill('#191970').animate(1500, '>', 500).fill('#fff').x(window.innerWidth / 2 - window.innerWidth * 0.4).y(30)
       }
 
-      var drawScene = function() {
-        this.button.hide()
+      const drawScene = () => {
+        button.hide()
 
-        var jimen = this.draw.rect(window.innerWidth, window.innerHeight * 0.1).fill('#fff').x(0).y(window.innerHeight - window.innerHeight * 0.1)
+        const jimen = draw.rect(window.innerWidth, window.innerHeight * 0.1).fill('#fff').x(0).y(window.innerHeight - window.innerHeight * 0.1)
 
-        var kabe = this.draw.rect(180, 180).x(10)
+        const kabe = draw.rect(180, 180).x(10)
         kabe.attr('id', 'house-block')
 
-        var mado1 = this.draw.rect(50, 50).x(50).y(30)
+        const mado1 = draw.rect(50, 50).x(50).y(30)
         mado1.attr('id', 'house-mado1')
-        var mado2 = this.draw.rect(50, 50).x(100).y(30)
+        const mado2 = draw.rect(50, 50).x(100).y(30)
         mado2.attr('id', 'house-mado2')
-        var mado3 = this.draw.rect(50, 50).x(50).y(80)
+        const mado3 = draw.rect(50, 50).x(50).y(80)
         mado3.attr('id', 'house-mado3')
-        var mado4 = this.draw.rect(50, 50).x(100).y(80)
+        const mado4 = draw.rect(50, 50).x(100).y(80)
         mado4.attr('id', 'house-mado4')
-        var mado = this.draw.group()
+        const mado = draw.group()
         mado.attr('id', 'house-mado')
         mado.add(mado1)
         mado.add(mado2)
         mado.add(mado3)
         mado.add(mado4)
 
-        var yane = this.draw.polygon('0,0 100,-100 200,0')
+        const yane = draw.polygon('0,0 100,-100 200,0')
         yane.attr('id', 'house-yane')
-        var entotsu = this.draw.rect(50, 80).x(120).y(-100)
+        const entotsu = draw.rect(50, 80).x(120).y(-100)
         entotsu.attr('id', 'house-entotsu')
-        var group = this.draw.group()
+        const group = draw.group()
 
         group.attr('id', 'group1')
         group.add(kabe)
@@ -90,19 +88,21 @@
         group.center((window.innerWidth / 2) + 80, window.innerHeight - jimen.height()).fill('none')
           .stroke({ color: '#fff', width: 6, linecap: 'round', linejoin: 'round' })
 
-        new Vivus(group.attr('id'), {duration: 200}, animateAfter);
+        new Vivus(group.attr('id'), {duration: 200}, animateAfter)
       }
 
-      var hoshi = draw.polygon('48 16 16 96 96 48 0 48 80 96')
-      var hoshiText = draw.text('touch!').font({size: 20}).x(20).y(96)
+      const hoshi = draw.polygon('48 16 16 96 96 48 0 48 80 96')
+      const hoshiText = draw.text('touch!').font({size: 20}).x(20).y(96)
 
-      var button = draw.group()
+      const centerX = window.innerWidth / 2;
+      const centerY = window.innerHeight / 2;
+      const button = draw.group()
       button.add(hoshi)
       button.add(hoshiText)
       button.on('click', drawScene, this).center(centerX, centerY).fill('#fff')
       button.animate(2000, '>').fill('#191970').reverse(true).loop()
     } else {
-      alert('SVG not supported');
+      alert('SVG not supported')
     }
   </script>
 </body>
